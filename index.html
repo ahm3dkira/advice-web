@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>advice</title>
+    <link rel="icon" href="https://img.icons8.com/ios/50/000000/bookmark-ribbon--v1.png">
+    <style type="text/css">
+  
+        *{
+          margin: 0;
+          padding: 0;
+          font: inherit;
+        }
+        main{
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .paper {
+        background-color:#FFF;
+        margin: auto;
+        width: 80vw;
+        font-family: "Courier New", monospace;
+        text-align: center;
+        line-height: 1.2;
+        color: #121212;
+        overflow: hidden;
+        padding: 2.5em 0;
+
+        }
+        .paper h3 {
+        font-size: 1.75em;
+        }
+        .paper p {
+        font-size: 1.5em;
+        padding: 1.2em 0;
+        }
+        .paper p.datetime {
+        font-size: 1em;
+        }
+        /* .tts{} */
+
+      </style>
+</head>
+<body>
+    <main>
+        <div class="paper">
+            <h3>AhmedKira.com</h3>
+
+            <p class="advice" >Never buy cheap cling film.</p>
+            <div class='btns'>
+                <span class="tts" onclick="Speak();" style="cursor: pointer;">&#x1F50A;</span>
+                <span class="newAdvice" onclick="newAdvice();" style="cursor: pointer;">&#8635;</span>
+
+            </div>
+
+            <p class="datetime"><span class="date"></span></p>
+
+        </div>
+
+        
+        
+    </main>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        async function newAdvice(){
+            const res = await(await fetch(`https://api.adviceslip.com/advice`)).json()
+            document.querySelector('.advice').innerHTML=res.slip.advice;
+            if(urlParams.get('debug')==1)console.log(res);
+        }
+        function Speak (){window.speechSynthesis.speak(new SpeechSynthesisUtterance(document.querySelector('.advice').innerHTML)); }
+
+
+
+        newAdvice();
+        
+        (()=>{document.querySelector('.date').innerHTML=new Date().toString().substring(0, 15);})();
+
+        if(urlParams.get('sound')==0){document.querySelector('.tts').remove();}
+        if(urlParams.get('more')==0){document.querySelector('.btns').remove();}
+
+        
+    </script>
+    
+</body>
+</html>
